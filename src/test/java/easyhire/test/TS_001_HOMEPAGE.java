@@ -13,11 +13,12 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class TS_001_HOMEPAGE {
     EasyHire mainPage;
-    String mainUrl = Resources.mainPageUrl;
+    String mainUrl = Resources.MAIN_PAGE_URL;
+    EasyHire.DriverType driverType = Resources.DRIVER_TYPE;
 
     @BeforeClass
     public void init(){
-        mainPage = new EasyHire(mainUrl, EasyHire.DriverType.HTML);
+        mainPage = new EasyHire(mainUrl, driverType);
     }
     @Test
     public void logoIsExist(){

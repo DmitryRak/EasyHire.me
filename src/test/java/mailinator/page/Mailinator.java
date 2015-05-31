@@ -1,49 +1,74 @@
 package mailinator.page;
 
+import mailinator.utils.JSonReader;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by dmitry on 30.5.15.
+ *
+ * Class for handy interaction with mailinator using native API
  */
 public class Mailinator {
-    private String mainUrl = "https://mailinator.com/";
-    private WebDriver driver;
-    private List<WebElement> easyHireEmails;
-    //TODO locating elements
+    private JSonReader reader;
+    private String mainUrl = "https://api.mailinator.com/api";
+    private String token;
 
     /**
-     * @param inboxUrl (e.g. inbox.jsp?to=test3005). test3005 - userName
-     * @param driver
+     *
+     * @param token - unique id to use mailinator.com API. Can be retrieved from your profile->Settings
      */
-    public Mailinator(String inboxUrl, WebDriver driver) {
-
-        this.driver = driver;
-        driver.get(mainUrl+inboxUrl);
-        new WebDriverWait(driver, 30)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[@id='InboxNameCtrl']")));
-        PageFactory.initElements(driver, this);
+    public Mailinator(String token) {
+        this.token = token;
+        reader = new JSonReader();
     }
-    public List<WebElement> findRegistrationMessage(){
-        easyHireEmails = driver.findElements(By.xpath("//a/div[contains(.,'EasyHire.me Account Activation')]"));
-        return easyHireEmails;
+    //TODO make public with MailinatorMail objects
+    private ArrayList<MailinatorMail> readAllMessagesFromInbox(String inbox){
+        JSONArray jsonMessages = null;
+        ArrayList<MailinatorMail> messages = new ArrayList<>();
+        try {
+            jsonMessages =  reader.readJsonFromUrl(mainUrl+"/inbox?to="+inbox+"&token="+token).getJSONArray("messages")  ;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for(int i = 0 ; i < jsonMessages.length() ; i++){
+            JSONObject messageJSonFormat = jsonMessages.getJSONObject(i);
+                MailinatorMail email = new MailinatorMail(messageJSonFormat.getString("id"), token);
+                messages.add(email);
+        }
+        return messages;
     }
-    public String getRegistrationMessage(){
-        easyHireEmails.get(0).click();
-        new WebDriverWait(driver, 30)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.id("mailshowdivbody")));
-        WebElement iframeMsg = driver.findElement(By.name("rendermail"));
-        driver.switchTo().frame(iframeMsg);
-        return driver.findElement(By.className("mailview")).getText();
+    public ArrayList<MailinatorMail> getMessagesFrom(String inbox, String from){
+        ArrayList<MailinatorMail> allMessages = readAllMessagesFromInbox(inbox);
+        ArrayList<MailinatorMail> messages = new ArrayList<>();
+        for(int i = 0 ; i < allMessages.size() ; i++){
+            MailinatorMail email = allMessages.get(i);
+            if(email.getFrom().equals(from)){
+                messages.add(email);
+            }
+        }
+        return messages;
     }
-    public WebDriver getDriver() {
-        return driver;
+    public ArrayList<MailinatorMail> getMessagesBySubject(String inbox, String subject){
+        ArrayList<MailinatorMail> allMessages = readAllMessagesFromInbox(inbox);
+        ArrayList<MailinatorMail> messages = new ArrayList<>();
+        for(int i = 0 ; i < allMessages.size() ; i++){
+            MailinatorMail email = allMessages.get(i);
+            if(email.getSubject().equals(subject)){
+                messages.add(email);
+            }
+        }
+        return messages;
     }
 }

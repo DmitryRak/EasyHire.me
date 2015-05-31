@@ -68,7 +68,10 @@ public class EasyHire {
             default:
                 driver = null;
         }
+        java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.SEVERE);
+
         driver.get(startPage);
+
         new WebDriverWait(driver, 30)
                 .until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(.,' Log in')]")));
         PageFactory.initElements(driver, this);

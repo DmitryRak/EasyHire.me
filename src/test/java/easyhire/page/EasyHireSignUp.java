@@ -37,6 +37,9 @@ public class EasyHireSignUp {
 
     @FindBy(xpath = "//button[contains(@class,'linkedin')]")
     private WebElement linkedInButton;
+
+    private WebElement alertText;
+
     public EasyHireSignUp(WebDriver driver){
         this.driver = driver;
         new WebDriverWait(driver, 30)
@@ -78,5 +81,12 @@ public class EasyHireSignUp {
 
     public WebDriver getDriver() {
         return driver;
+    }
+
+    public WebElement getAlertText() {
+        new WebDriverWait(driver, 30)
+                .until(ExpectedConditions.visibilityOfElementLocated(By.className("alert")));
+        alertText = driver.findElement(By.className("alert"));
+        return alertText;
     }
 }
