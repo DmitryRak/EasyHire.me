@@ -19,7 +19,8 @@ Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.418 sec - in
 Results :
 Tests run: 10, Failures: 0, Errors: 0, Skipped: 0
 
-        Additional info regarding each test case can be found in created folders/files:                                      EasyHire.me/target/surefire-reports/junitreports
-        EasyHire.me/target/surefire-reports/Surefire suite/Surefire test.html
+Additional info regarding each test case can be found in created folders/files:
+ - EasyHire.me/target/surefire-reports/junitreports
+ - EasyHire.me/target/surefire-reports/Surefire suite/Surefire test.html
 
 
