@@ -42,6 +42,7 @@
                 <configuration>
                     <includes>
                         <include>**/TS_*.java</include>
+                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     </includes>
                 </configuration>
             </plugin>

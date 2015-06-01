@@ -40,7 +40,7 @@ public class TS_005_SIMPLE_SIGNUP {
         signUpPage.getEmailInput().sendKeys(userID+"@mailinator.com");
         signUpPage.getPassInput().sendKeys("testPass");
         signUpPage.getSubmitButton().click();
-
+        System.out.println("New user attempted to register for "+userID+"@mailinator.com");
         assertThat(signUpPage.getAlertText().isDisplayed());
         assertThat(signUpPage.getAlertText().getText()).isEqualTo("Thank you for signing up! Please check your email to activate your account.");
     }
