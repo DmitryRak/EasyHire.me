@@ -9,7 +9,7 @@ What need to be insalled:
 
 How to run:
 
-1. git clone https://github.com/DmitryRak/EasyHire.me.git or git fetch
+1. git clone https://github.com/DmitryRak/EasyHire.me.git or git pull
 2. cd EasyHire.me
 3. mvn test
 
